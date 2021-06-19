@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import RoomsContainer from '../container/RoomsContainer'
 
-const rooms = () => {
+const Rooms = () => {
   return (
     <div>
       <RoomsContainer/>
@@ -11,9 +11,9 @@ const rooms = () => {
 };
 
 
-rooms.propTypes = {
+Rooms.propTypes = {
 
 };
 
 
-export default rooms;
+export default Rooms;

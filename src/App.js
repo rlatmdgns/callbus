@@ -1,6 +1,7 @@
 import "./App.css";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
-import rooms from './pages/rooms';
+import Rooms from './pages/Rooms';
+import RoomDetail from './pages/RoomDetail';
 import { Header } from './components/Header'
 function App() {
   return (
@@ -8,7 +9,8 @@ function App() {
       <Router>
         <Header/>
         <Switch>
-          <Route path={["/","/rooms"]} exact component={rooms}></Route>
+          <Route path={["/","/rooms"]} exact component={Rooms}></Route>
+          <Route path={"/rooms/:roomPK"} component={RoomDetail}></Route>
         </Switch>
       </Router>
     </div>

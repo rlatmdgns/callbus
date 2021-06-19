@@ -3,6 +3,12 @@ import {
   LOAD_ROOMS_FAIL,
   LOAD_ROOMS_REQUEST,
   LOAD_ROOMS_SUCCESS,
+  LOAD_ROOMDETAIL_REQUEST,
+  LOAD_ROOMDETAIL_SUCCESS,
+  LOAD_ROOMDETAIL_FAIL,
+  SORT_ROOMS_REQUEST,
+  SORT_ROOMS_SUCCESS,
+  SORT_ROOMS_FAIL
 } from '../actions';
 
 const roomItems = [
@@ -58,7 +64,22 @@ const roomItems = [
     "canceled": true
   }
 ]
-function* loadRooms(action) {
+
+function* sortRooms(action) {
+  try {
+    yield put({
+      type: SORT_ROOMS_SUCCESS,
+      data: action.data,
+    });
+  } catch (error) {
+    yield put({
+      type: SORT_ROOMS_FAIL,
+      data: error,
+    });
+  }
+}
+
+function* loadRooms() {
   try {
     yield put({
       type: LOAD_ROOMS_SUCCESS,
@@ -72,12 +93,35 @@ function* loadRooms(action) {
   }
 }
 
-function* watchRooms() {
+function* loadRoomDetail(action) {
+  try {
+    yield put({
+      type: LOAD_ROOMDETAIL_SUCCESS,
+      data: action.data,
+    });
+  } catch (error) {
+    yield put({
+      type: LOAD_ROOMDETAIL_FAIL,
+      data: error,
+    });
+  }
+}
+
+function* watchSortRooms() {
+  yield takeLatest(SORT_ROOMS_REQUEST, sortRooms);
+}
+
+function* watchLoadRooms() {
   yield takeLatest(LOAD_ROOMS_REQUEST, loadRooms);
+}
+function* watchLoadRoomDetail() {
+  yield takeLatest(LOAD_ROOMDETAIL_REQUEST, loadRoomDetail);
 }
 
 export default function* roomsSaga() {
   yield all([
-    fork(watchRooms),
+    fork(watchSortRooms),
+    fork(watchLoadRooms),
+    fork(watchLoadRoomDetail),
   ]);
 }
