@@ -15,7 +15,7 @@ const RoomsList = () => {
     <ul>
       {rooms.map(room =>(
         <li key={room.pk}>
-          {/* <RoomItem room={room}/> */}
+          <RoomItem room={room}/>
         </li>
       ))}
     </ul>
