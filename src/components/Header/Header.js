@@ -6,7 +6,7 @@ const Header = () => {
     <HeaderWrapper>
       <Inner>
         <Logo>CALLROOM</Logo>
-        <GoRoomButton to="/rooms">방 등록하기</GoRoomButton>
+        <GoRoomButton to="/room/register">방 등록하기</GoRoomButton>
       </Inner>
     </HeaderWrapper>
   );

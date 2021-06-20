@@ -13,6 +13,10 @@ export const RoomGroup = styled.ul`
   li{
     margin: 10px 20px;
   }
+  a{
+    color: #333;
+    text-decoration: none;
+  }
 `
 export const RoomButtonArea = styled.div`
   text-align: left;

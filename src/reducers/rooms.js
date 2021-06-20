@@ -10,10 +10,16 @@ import {
   LOAD_ROOMDETAIL_REQUEST,
   LOAD_ROOMDETAIL_SUCCESS,
   LOAD_ROOMDETAIL_FAIL,
+  CHANGE_CANCLE_REQUEST,
+  CHANGE_CANCLE_SUCCESS,
+  CHANGE_CANCLE_FAIL,
 } from "../actions";
 
 export const initalState = {
-  sortRoomsLoading:false,
+  changeCancleRoomLoading: false,
+  changeCancleRoomDone: false,
+  changeCancleRoomError: null,
+  sortRoomsLoading: false,
   sortRoomsDone: false,
   sortRoomsError: null,
   loadRoomsLoading: false,
@@ -83,6 +89,20 @@ export const initalState = {
 const reducer = (state = initalState, action) =>
   produce(state, (draft) => {
     switch (action.type) {
+      case CHANGE_CANCLE_REQUEST:
+        draft.changeCancleRoomLoading = true;
+        break;
+      case CHANGE_CANCLE_SUCCESS:
+        {
+          const room = draft.rooms.find((room) => room.pk === action.data.pk);
+          room.canceled = action.data.canceled
+          draft.changeCancleRoomLoading = false;
+          draft.changeCancleRoomDone = true;
+        }
+        break;
+      case CHANGE_CANCLE_FAIL:
+        draft.changeCancleRoomError = action.data;
+        break;
       case SORT_ROOMS_REQUEST:
         draft.sortRoomsLoading = true;
         break;

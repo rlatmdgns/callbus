@@ -1,23 +1,16 @@
 import React from "react";
-import { Room } from "./styles";
+import { changePriceWon } from "../../common/common";
+import { Room, Amount, Address } from "./styles";
 
 const RoomItem = ({ room }) => {
+  const depositAmount = changePriceWon(room.depositAmount);
   return (
     <Room>
-      <img src={room.thumbnail} />
-      <div>
-        <div>
-        {room.depositAmount}
-      {/* 임대료{room.rentAmount}
-      관리비 {room.maintenanceFee} */}
-        </div>
-     <div>
-     주소 {room.address}
-     </div>
-    <div>
-    상세주소 {room.detailAddress}
-    </div>
-      </div>
+      <img src={room.thumbnail} alt="방 이미지" />
+      <Amount>{depositAmount}</Amount>
+      <Address>
+        {room.address} {room.detailAddress}
+      </Address>
     </Room>
   );
 };
