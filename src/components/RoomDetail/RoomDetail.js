@@ -5,7 +5,6 @@ import { DetailWrapper, DetailHeader, Info, DetailInfo, RoomOnOffButton } from "
 import { useDispatch } from "react-redux";
 import { changeCancleRoom } from "../../actions";
 const RoomDetail = ({ detail }) => {
-  console.log(detail);
   const dispatch = useDispatch();
   const depositAmount = changePriceWon(detail.depositAmount);
   const rentAmount = changePriceWon(detail.rentAmount);
