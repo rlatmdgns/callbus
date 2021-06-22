@@ -92,22 +92,22 @@ const RoomForm = () => {
     };
     dispatch(registerRoom(room));
   };
-  const watchAllFields = watch();
-  useEffect(() => {
-    if (localStorage.getItem("register")) {
-      if (window.confirm("이어서 입력하시겠습니까?")) {
-        setPrevRegister(JSON.parse(localStorage.getItem("register")));
-      } else {
-        localStorage.removeItem("register");
-      }
-    }
-  }, []);
-  useEffect(() => {
-    return () => {
-      console.log(watchAllFields)
-      localStorage.setItem("register", JSON.stringify(watchAllFields));
-    };
-  }, []);
+  // const watchAllFields = watch();
+  // useEffect(() => {
+  //   if (localStorage.getItem("register")) {
+  //     if (window.confirm("이어서 입력하시겠습니까?")) {
+  //       setPrevRegister(JSON.parse(localStorage.getItem("register")));
+  //     } else {
+  //       localStorage.removeItem("register");
+  //     }
+  //   }
+  // }, []);
+  // useEffect(() => {
+  //   return () => {
+  //     console.log(watchAllFields)
+  //     localStorage.setItem("register", JSON.stringify(watchAllFields));
+  //   };
+  // }, []);
 
   useEffect(() => {
     if (registerDone) {
