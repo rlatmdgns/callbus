@@ -1,6 +1,9 @@
 import produce from "immer";
 
 import {
+  REGISTER_ROOM_REQUEST,
+  REGISTER_ROOM_SUCCESS,
+  REGISTER_ROOM_FAIL,
   SORT_ROOMS_REQUEST,
   SORT_ROOMS_SUCCESS,
   SORT_ROOMS_FAIL,
@@ -16,6 +19,9 @@ import {
 } from "../actions";
 
 export const initalState = {
+  registerLoading: false,
+  registerDone: false,
+  registerError: null,
   changeCancleRoomLoading: false,
   changeCancleRoomDone: false,
   changeCancleRoomError: null,
@@ -89,6 +95,18 @@ export const initalState = {
 const reducer = (state = initalState, action) =>
   produce(state, (draft) => {
     switch (action.type) {
+      case REGISTER_ROOM_REQUEST:
+        draft.registerLoading = true;
+        break;
+      case REGISTER_ROOM_SUCCESS:
+        draft.registerLoading = false;
+        draft.registerDone= true;
+        draft.rooms = draft.rooms.concat(action.data)
+        break;
+      case REGISTER_ROOM_FAIL:
+        draft.registerLoading = false;
+        draft.registerError = action.data;
+        break;
       case CHANGE_CANCLE_REQUEST:
         draft.changeCancleRoomLoading = true;
         break;

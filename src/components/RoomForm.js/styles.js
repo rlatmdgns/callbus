@@ -2,7 +2,7 @@ import styled from "styled-components";
 
 export const RegisterForm = styled.form`
   max-width: 940px;
-  margin: 0 auto;
+  margin: 20px auto;
   padding: 20px;
   fieldset {
     padding: 0;
@@ -91,4 +91,16 @@ export const Select = styled.select`
   box-sizing: border-box;
   border: 1px solid #ccc;
   border-radius: 4px;
+`;
+
+export const SubmitButton = styled.button`
+display: block;
+width: 100%;
+height: 40px;
+margin-top:20px;
+border:0;
+background: #333;
+font-size: 600;
+color:#fff;
+cursor: pointer;
 `;

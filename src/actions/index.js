@@ -15,6 +15,10 @@ export const CHANGE_CANCLE_SUCCESS = 'CHANGE_CANCLE_SUCCESS';
 export const CHANGE_CANCLE_FAIL = 'CHANGE_CANCLE_FAIL';
 export const CHANGE_CANCLE_REQUEST = 'CHANGE_CANCLE_REQUEST';
 
+export const REGISTER_ROOM_SUCCESS = 'REGISTER_ROOM_SUCCESS';
+export const REGISTER_ROOM_FAIL = 'REGISTER_ROOM_FAIL';
+export const REGISTER_ROOM_REQUEST = 'REGISTER_ROOM_REQUEST';
+
 export const loadRooms = () => ({
   type: LOAD_ROOMS_REQUEST,
 });
@@ -31,5 +35,11 @@ export const sortRooms= (data) => ({
 
 export const changeCancleRoom= (data) => ({
   type: CHANGE_CANCLE_REQUEST,
+  data,
+});
+
+
+export const registerRoom= (data) => ({
+  type: REGISTER_ROOM_REQUEST,
   data,
 });

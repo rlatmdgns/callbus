@@ -12,6 +12,9 @@ import {
   CHANGE_CANCLE_REQUEST,
   CHANGE_CANCLE_SUCCESS,
   CHANGE_CANCLE_FAIL,
+  REGISTER_ROOM_REQUEST,
+  REGISTER_ROOM_SUCCESS,
+  REGISTER_ROOM_FAIL,
 } from "../actions";
 
 const roomItems = [
@@ -67,6 +70,21 @@ const roomItems = [
     canceled: true,
   },
 ];
+
+function* registerRoom(action) {
+  try {
+    yield put({
+      type: REGISTER_ROOM_SUCCESS,
+      data: action.data,
+    });
+  } catch (error) {
+    yield put({
+      type: REGISTER_ROOM_FAIL,
+      data: error,
+    });
+  }
+}
+
 function* changeCancleRoom(action) {
   try {
     yield put({
@@ -122,6 +140,9 @@ function* loadRoomDetail(action) {
     });
   }
 }
+function* watchRegisterRoom() {
+  yield takeLatest(REGISTER_ROOM_REQUEST, registerRoom);
+}
 function* watchChangeCancleRoom() {
   yield takeLatest(CHANGE_CANCLE_REQUEST, changeCancleRoom);
 }
@@ -137,5 +158,5 @@ function* watchLoadRoomDetail() {
 }
 
 export default function* roomsSaga() {
-  yield all([fork(watchSortRooms), fork(watchChangeCancleRoom), fork(watchLoadRooms), fork(watchLoadRoomDetail)]);
+  yield all([fork(watchRegisterRoom), fork(watchSortRooms), fork(watchChangeCancleRoom), fork(watchLoadRooms), fork(watchLoadRoomDetail)]);
 }

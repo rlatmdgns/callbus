@@ -10,12 +10,22 @@ import {
   TextWithInputWrapper,
   InputBox,
   Label,
+  SubmitButton,
 } from "./styles";
 import PropTypes from "prop-types";
 import DaumPostcode from "react-daum-postcode";
+import { registerRoom } from "../../actions";
+import { useDispatch, useSelector } from "react-redux";
+import Modal from "../Modal/Modal";
+import Alert from '../Modal/Alert';
+
 const RoomForm = () => {
+  const dispatch = useDispatch();
+  const { registerDone } = useSelector((state) => state.rooms);
   const [address, setAddress] = useState(""); // 주소
   const [isOpenPost, setIsOpenPost] = useState(false);
+  const [isShow, setIsShow] = useState(false);
+  const [priceTypeSelect, setPriceTypeSelect] = useState("");
   const [prevRegister, setPrevRegister] = useState({});
   const { register, handleSubmit, watch } = useForm();
   const addressInput = useRef();
@@ -75,7 +85,11 @@ const RoomForm = () => {
     setIsOpenPost(false);
   };
   const onSubmit = (data) => {
-    console.log(data);
+    const room = {
+      pk: 1,
+      ...data,
+    };
+    dispatch(registerRoom(room));
   };
   const watchAllFields = watch();
   useEffect(() => {
@@ -94,6 +108,11 @@ const RoomForm = () => {
   //   };
   // }, []);
 
+  useEffect(() => {
+    if (registerDone) {
+      setIsShow(true)
+    }
+  }, [registerDone]);
   const postCodeStyle = {
     display: "block",
     position: "absolute",
@@ -104,150 +123,164 @@ const RoomForm = () => {
   };
 
   return (
-    <RegisterForm onSubmit={handleSubmit(onSubmit)}>
-      <fieldset>
-        <legend>방 등록 폼</legend>
-        <FormCell>
-          <Label>주소</Label>
-          {isOpenPost ? <DaumPostcode style={postCodeStyle} autoClose onComplete={onCompletePost} /> : null}
-          <Input
-            type="text"
-            placeholder="건물주소 or 건물명을 검색하세요."
-            title="주소"
-            value={address}
-            {...register("address")}
-            ref={addressInput}
-            onClick={() => onChangeOpenPost()}
-          />
-          <Input
-            type="text"
-            {...register("detailAddress")}
-            placeholder="상세주소(동/호수를 입력해주세요.)"
-            title="상세주소"
-            defaultValue={prevRegister.detailAddress}
-          />
-        </FormCell>
-        <FormCell>
-          <Label htmlFor="">종류</Label>
-          <Select name="" id="" {...register("realEstate")} defaultValue={prevRegister.realEstate}>
-            {realEstate.map((item) => {
-              if (item.value === prevRegister.realEstate) {
+    <>
+      <Modal isShow={isShow} setIsShow={setIsShow} dimd>
+        <Alert setIsShow={setIsShow}>
+            방이 등록되었습니다.
+        </Alert>
+      </Modal>
+      <RegisterForm onSubmit={handleSubmit(onSubmit)}>
+        <fieldset>
+          <legend>방 등록 폼</legend>
+          <FormCell>
+            <Label>주소</Label>
+            {isOpenPost ? <DaumPostcode style={postCodeStyle} autoClose onComplete={onCompletePost} /> : null}
+            <Input
+              type="text"
+              placeholder="건물주소 or 건물명을 검색하세요."
+              title="주소"
+              value={address}
+              {...register("address")}
+              ref={addressInput}
+              onClick={() => onChangeOpenPost()}
+            />
+            <Input
+              type="text"
+              {...register("detailAddress")}
+              placeholder="상세주소(동/호수를 입력해주세요.)"
+              title="상세주소"
+              defaultValue={prevRegister.detailAddress}
+            />
+          </FormCell>
+          <FormCell>
+            <Label htmlFor="">종류</Label>
+            <Select name="" id="" {...register("realEstate")} defaultValue={prevRegister.realEstate}>
+              {realEstate.map((item) => {
+                if (item.value === prevRegister.realEstate) {
+                  return (
+                    <option value={item.value} selected>
+                      {item.title}
+                    </option>
+                  );
+                }
+                return <option value={item.value}>{item.title}</option>;
+              })}
+            </Select>
+          </FormCell>
+          <FormCell>
+            <Label>가격</Label>
+            <CustomLabelWrapper>
+              {priceType.map((item) => {
                 return (
-                  <option value={item.value} selected>
-                    {item.title}
-                  </option>
+                  <>
+                    <input
+                      type="radio"
+                      id={item.value}
+                      value={item.value}
+                      {...register("realEstatePriceType")}
+                      defaultValue={prevRegister.realEstatePriceType}
+                    />
+                    <CustomLabel htmlFor={item.value} onClick={() => setPriceTypeSelect(item.value)}>
+                      {item.title}
+                    </CustomLabel>
+                  </>
                 );
-              }
-              return <option value={item.value}>{item.title}</option>;
-            })}
-          </Select>
-        </FormCell>
-        <FormCell>
-          <Label>가격</Label>
-          <CustomLabelWrapper>
-            {priceType.map((item) => {
-              return (
-                <>
-                  <input
-                    type="radio"
-                    id={item.value}
-                    value={item.value}
-                    {...register("realEstatePriceType")}
-                    defaultValue={prevRegister.realEstatePriceType}
+              })}
+            </CustomLabelWrapper>
+            <TextWithInputWrapper>
+              <InputBox>
+                <Input
+                  type="text"
+                  placeholder="보증금 또는 매매가"
+                  {...register("depositAmount")}
+                  defaultValue={prevRegister.depositAmount}
+                />
+                만원
+              </InputBox>
+              {priceTypeSelect === "MONTHLY" && (
+                <InputBox>
+                  <Input
+                    type="text"
+                    placeholder="임대료"
+                    {...register("rentAmount")}
+                    defaultValue={prevRegister.rentAmount}
                   />
-                  <CustomLabel htmlFor={item.value}>{item.title}</CustomLabel>
-                </>
-              );
-            })}
-          </CustomLabelWrapper>
-          <TextWithInputWrapper>
-            <InputBox>
-              <Input
-                type="text"
-                placeholder="보증금"
-                {...register("depositAmount")}
-                defaultValue={prevRegister.depositAmount}
-              />
-              만원
-            </InputBox>
-            <InputBox>
-              <Input
-                type="text"
-                placeholder="임대료"
-                {...register("rentAmount")}
-                defaultValue={prevRegister.rentAmount}
-              />
-              만원
-            </InputBox>
-          </TextWithInputWrapper>
-        </FormCell>
-        <FormCell>
-          <Label htmlFor="">관리비</Label>
-          <InputBox>
-            <Input type="text" {...register("maintenanceFee")} defaultValue={prevRegister.maintenanceFee} /> 만원 / 월
-          </InputBox>
-        </FormCell>
-        <FormCell>
-          <Label>방향</Label>
-          <Select name="" id="" {...register("sunlightDirection")} defaultValue={prevRegister.sunlightDirection}>
-            {direction.map((item) => {
-              return <option value={item.value}>{item.title}</option>;
-            })}
-          </Select>
-        </FormCell>
-        <FormCell>
-          <Label>관리 항목 (다중선택가능)</Label>
-          <CustomLabelWrapper>
-            {feeItems.map((item) => {
-              return (
-                <>
-                  <input
-                    type="checkbox"
-                    id={item.value}
-                    value={item.value}
-                    {...register("maintenanceFeeItems")}
-                    defaultValue={prevRegister.maintenanceFeeItems}
-                  />
-                  <CustomLabel htmlFor={item.value}>{item.title}</CustomLabel>
-                </>
-              );
-            })}
-          </CustomLabelWrapper>
-        </FormCell>
-        <FormCell>
-          <Label>전용면적</Label>
-          <TextWithInputWrapper>
-            <InputBox>
-              <Input type="text" {...register("leasableArea")} defaultValue={prevRegister.leasableArea} />평
-            </InputBox>
-            <InputBox>
-              <Input type="text" {...register("rentAmount")} defaultValue={prevRegister.leasableArea} />
-              m2
-            </InputBox>
-          </TextWithInputWrapper>
-        </FormCell>
-        <FormCell>
-          <Label>애완동물 여부</Label>
-          <CustomLabelWrapper>
-            {animalAvailability.map((item) => {
-              return (
-                <>
-                  <input
-                    type="radio"
-                    id={item.title}
-                    value={item.value}
-                    {...register("pet")}
-                    defaultValue={prevRegister.pet}
-                  />
-                  <CustomLabel htmlFor={item.title}>{item.title}</CustomLabel>
-                </>
-              );
-            })}
-          </CustomLabelWrapper>
-        </FormCell>
-        <button type="submit">버튼</button>
-      </fieldset>
-    </RegisterForm>
+                  만원
+                </InputBox>
+              )}
+            </TextWithInputWrapper>
+          </FormCell>
+          {(priceTypeSelect === "MONTHLY" || priceTypeSelect === "JEONSE") && (
+            <FormCell>
+              <Label htmlFor="">관리비</Label>
+              <InputBox>
+                <Input type="text" {...register("maintenanceFee")} defaultValue={prevRegister.maintenanceFee} /> 만원 /
+                월
+              </InputBox>
+            </FormCell>
+          )}
+          <FormCell>
+            <Label>방향</Label>
+            <Select name="" id="" {...register("sunlightDirection")} defaultValue={prevRegister.sunlightDirection}>
+              {direction.map((item) => {
+                return <option value={item.value}>{item.title}</option>;
+              })}
+            </Select>
+          </FormCell>
+          <FormCell>
+            <Label>관리 항목 (다중선택가능)</Label>
+            <CustomLabelWrapper>
+              {feeItems.map((item) => {
+                return (
+                  <>
+                    <input
+                      type="checkbox"
+                      id={item.value}
+                      value={item.value}
+                      {...register("maintenanceFeeItems")}
+                      defaultValue={prevRegister.maintenanceFeeItems}
+                    />
+                    <CustomLabel htmlFor={item.value}>{item.title}</CustomLabel>
+                  </>
+                );
+              })}
+            </CustomLabelWrapper>
+          </FormCell>
+          <FormCell>
+            <Label>전용면적</Label>
+            <TextWithInputWrapper>
+              <InputBox>
+                <Input type="text" />평
+              </InputBox>
+              <InputBox>
+                <Input type="text" {...register("leasableArea")} defaultValue={prevRegister.leasableArea} />
+                m2
+              </InputBox>
+            </TextWithInputWrapper>
+          </FormCell>
+          <FormCell>
+            <Label>애완동물 여부</Label>
+            <CustomLabelWrapper>
+              {animalAvailability.map((item) => {
+                return (
+                  <>
+                    <input
+                      type="radio"
+                      id={item.title}
+                      value={item.value}
+                      {...register("pet")}
+                      defaultValue={prevRegister.pet}
+                    />
+                    <CustomLabel htmlFor={item.title}>{item.title}</CustomLabel>
+                  </>
+                );
+              })}
+            </CustomLabelWrapper>
+          </FormCell>
+          <SubmitButton type="submit">버튼</SubmitButton>
+        </fieldset>
+      </RegisterForm>
+    </>
   );
 };
 
