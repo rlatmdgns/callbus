@@ -137,7 +137,7 @@ const reducer = (state = initalState, action) =>
         break;
       case LOAD_ROOMDETAIL_SUCCESS:
         draft.loadRoomDetailLoading = false;
-        draft.roomDetail = draft.rooms.find((room) => room.pk == action.data);
+        draft.roomDetail = draft.rooms.find((room) => room.pk === parseInt(action.data));
         break;
       case LOAD_ROOMDETAIL_FAIL:
         draft.loadRoomDetailLoading = false;

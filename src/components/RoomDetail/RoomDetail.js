@@ -1,5 +1,4 @@
 import React from "react";
-import PropTypes from "prop-types";
 import { changePriceWon } from "../../common/common";
 import { DetailWrapper, DetailHeader, Info, DetailInfo, RoomOnOffButton } from "./styles";
 import { useDispatch } from "react-redux";

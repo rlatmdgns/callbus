@@ -13,7 +13,6 @@ import {
   SubmitButton,
   CustomLabelContent,
 } from "./styles";
-import PropTypes from "prop-types";
 import DaumPostcode from "react-daum-postcode";
 import { registerRoom } from "../../actions";
 import { useDispatch, useSelector } from "react-redux";
