@@ -43,7 +43,8 @@ export const Input = styled.input`
 `;
 
 export const CustomLabel = styled.label`
-  flex: 1 1 33%;
+  display: block;
+  width:100%;
   padding: 10px 0;
   text-align: center;
   border: 1px solid #ccc;
@@ -62,6 +63,10 @@ export const CustomLabelWrapper = styled.div`
     background: #fff29b;
   }
 `;
+
+export const CustomLabelContent = styled.div`
+  flex:1 1 33%;
+`
 
 export const TextWithInputWrapper = styled.div`
   display: flex;

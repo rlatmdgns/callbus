@@ -11,6 +11,7 @@ import {
   InputBox,
   Label,
   SubmitButton,
+  CustomLabelContent,
 } from "./styles";
 import PropTypes from "prop-types";
 import DaumPostcode from "react-daum-postcode";
@@ -18,6 +19,7 @@ import { registerRoom } from "../../actions";
 import { useDispatch, useSelector } from "react-redux";
 import Modal from "../Modal/Modal";
 import Alert from '../Modal/Alert';
+import shortId from 'shortid';
 
 const RoomForm = () => {
   const dispatch = useDispatch();
@@ -86,7 +88,7 @@ const RoomForm = () => {
   };
   const onSubmit = (data) => {
     const room = {
-      pk: 1,
+      pk: shortId.generate(),
       ...data,
     };
     dispatch(registerRoom(room));
@@ -101,12 +103,12 @@ const RoomForm = () => {
       }
     }
   }, []);
-  // useEffect(() => {
-  //   return () => {
-  //     console.log(111)
-  //     localStorage.setItem("register", JSON.stringify(watchAllFields));
-  //   };
-  // }, []);
+  useEffect(() => {
+    return () => {
+      console.log(watchAllFields)
+      localStorage.setItem("register", JSON.stringify(watchAllFields));
+    };
+  }, []);
 
   useEffect(() => {
     if (registerDone) {
@@ -158,12 +160,12 @@ const RoomForm = () => {
               {realEstate.map((item) => {
                 if (item.value === prevRegister.realEstate) {
                   return (
-                    <option value={item.value} selected>
+                    <option key={item.value} value={item.value} selected>
                       {item.title}
                     </option>
                   );
                 }
-                return <option value={item.value}>{item.title}</option>;
+                return <option key={item.value} value={item.value}>{item.title}</option>;
               })}
             </Select>
           </FormCell>
@@ -172,7 +174,7 @@ const RoomForm = () => {
             <CustomLabelWrapper>
               {priceType.map((item) => {
                 return (
-                  <>
+                  <CustomLabelContent>
                     <input
                       type="radio"
                       id={item.value}
@@ -180,10 +182,10 @@ const RoomForm = () => {
                       {...register("realEstatePriceType")}
                       defaultValue={prevRegister.realEstatePriceType}
                     />
-                    <CustomLabel htmlFor={item.value} onClick={() => setPriceTypeSelect(item.value)}>
+                    <CustomLabel key={item.value} htmlFor={item.value} onClick={() => setPriceTypeSelect(item.value)}>
                       {item.title}
                     </CustomLabel>
-                  </>
+                  </CustomLabelContent>
                 );
               })}
             </CustomLabelWrapper>
@@ -223,7 +225,7 @@ const RoomForm = () => {
             <Label>방향</Label>
             <Select name="" id="" {...register("sunlightDirection")} defaultValue={prevRegister.sunlightDirection}>
               {direction.map((item) => {
-                return <option value={item.value}>{item.title}</option>;
+                return <option key={item.value} value={item.value}>{item.title}</option>;
               })}
             </Select>
           </FormCell>
@@ -232,7 +234,7 @@ const RoomForm = () => {
             <CustomLabelWrapper>
               {feeItems.map((item) => {
                 return (
-                  <>
+                  <CustomLabelContent>
                     <input
                       type="checkbox"
                       id={item.value}
@@ -240,8 +242,8 @@ const RoomForm = () => {
                       {...register("maintenanceFeeItems")}
                       defaultValue={prevRegister.maintenanceFeeItems}
                     />
-                    <CustomLabel htmlFor={item.value}>{item.title}</CustomLabel>
-                  </>
+                    <CustomLabel key={item.value}  htmlFor={item.value}>{item.title}</CustomLabel>
+                  </CustomLabelContent>
                 );
               })}
             </CustomLabelWrapper>
@@ -263,7 +265,7 @@ const RoomForm = () => {
             <CustomLabelWrapper>
               {animalAvailability.map((item) => {
                 return (
-                  <>
+                  <CustomLabelContent key={item.value} >
                     <input
                       type="radio"
                       id={item.title}
@@ -271,8 +273,8 @@ const RoomForm = () => {
                       {...register("pet")}
                       defaultValue={prevRegister.pet}
                     />
-                    <CustomLabel htmlFor={item.title}>{item.title}</CustomLabel>
-                  </>
+                    <CustomLabel  htmlFor={item.title}>{item.title}</CustomLabel>
+                  </CustomLabelContent>
                 );
               })}
             </CustomLabelWrapper>
